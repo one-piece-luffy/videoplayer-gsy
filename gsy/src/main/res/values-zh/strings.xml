@@ -1,0 +1,10 @@
+<resources>
+    <string name="gsy_speeding">快进中</string>
+
+    <string name="gsy_speed">倍速</string>
+    <string name="gsy_video_default">默认</string>
+    <string name="gsy_fill">充满</string>
+    <string name="gsy_full">全屏</string>
+    <string name="gsy_original_size">原始大小</string>
+    <string name="gsy_center_cut">居中</string>
+</resources>
