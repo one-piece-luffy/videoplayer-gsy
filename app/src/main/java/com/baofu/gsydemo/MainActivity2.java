@@ -62,9 +62,9 @@ public class MainActivity2 extends AppCompatActivity {
 
 
 
-//        String url = "https://bfikuncdn.com/20240702/gUjZmh3D/index.m3u8";
+        String url = "https://bfikuncdn.com/20240702/gUjZmh3D/index.m3u8";
 //        String url = "https://m8t.vboku.com/20230325/NA3vw31V/index.m3u8?sign=S7cRpZ10IZtUDxDIRr%252FFeRRnyDIsH1TZ9IZe2hRv2OM%253D";
-        String url = "https://s10-e1.etcbbh.xyz/ppot/_definst_/mp4:s10/kvod/dhp-jscd2j-no-transyouke-006B409EFqpu5.mp4/chunklist.m3u8?vendtime=1743319171&vhash=WwHcpchsDu8UQWTkkIqZZd4xukWRpa1GfBlgfaF0OMY=&vCustomParameter=0_103.169.127.152_HK_1_0&lb=7fb27a2dd8a388ee580c4103717386bb&us=1&proxy=Sp4mBMKnBcLqOs9YQ2vuUNfyEPYO5hAObpAwCR4nD9Sy7bwV7CnC2rbCIvbT6DYOcekU7bwV7CnC2rbCIvqPc9dOM5XBcDlRNnpCJ0jPJ4kT6PYPs9YOYvZRsD&vv=38fa9409a68d91c6369dee4bb8e91cb7&pub=CJSqCp4qDZCrDYupDJTVI4jVCJ0pBZ4sEIunCZSkCJKoNsKoDZWmOZWnCc8vDZHcP38vOJTbEJ0vOpHaCJapDs4nNs8sD68tEJGuEJGoDcOmC3CrDJ4qE3GtDJDYOJbaP31Y";
+//        String url = "https://s10-e1.etcbbh.xyz/ppot/_definst_/mp4:s10/kvod/dhp-jscd2j-no-transyouke-006B409EFqpu5.mp4/chunklist.m3u8?vendtime=1743319171&vhash=WwHcpchsDu8UQWTkkIqZZd4xukWRpa1GfBlgfaF0OMY=&vCustomParameter=0_103.169.127.152_HK_1_0&lb=7fb27a2dd8a388ee580c4103717386bb&us=1&proxy=Sp4mBMKnBcLqOs9YQ2vuUNfyEPYO5hAObpAwCR4nD9Sy7bwV7CnC2rbCIvbT6DYOcekU7bwV7CnC2rbCIvqPc9dOM5XBcDlRNnpCJ0jPJ4kT6PYPs9YOYvZRsD&vv=38fa9409a68d91c6369dee4bb8e91cb7&pub=CJSqCp4qDZCrDYupDJTVI4jVCJ0pBZ4sEIunCZSkCJKoNsKoDZWmOZWnCc8vDZHcP38vOJTbEJ0vOpHaCJapDs4nNs8sD68tEJGuEJGoDcOmC3CrDJ4qE3GtDJDYOJbaP31Y";
 
         //增加封面
         ImageView imageView = new ImageView(this);
