@@ -1,11 +1,9 @@
 package com.baofu.gsydemo;
 
+import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowInsetsController;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -20,11 +18,9 @@ import com.baofu.gsy.controller.listener.GSYSimpleListener;
 import com.baofu.gsydemo.databinding.ActivityMainBinding;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
-import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.Debuger;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
 import java.util.HashMap;
@@ -37,7 +33,6 @@ public class MainActivity2 extends AppCompatActivity {
     ActivityMainBinding binding;
     private boolean isPlay;
     private boolean isPause;
-
 
     @Override
     protected void onStart() {
@@ -59,10 +54,16 @@ public class MainActivity2 extends AppCompatActivity {
                 binding.detailPlayer.togglePlay();
             }
         });
-
-
+        binding.btnSlide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity2.this, SlideActivity.class);
+                startActivity(intent);
+            }
+        });
 
         String url = "https://bfikuncdn.com/20240702/gUjZmh3D/index.m3u8";
+//        String url = "https://play.ly166.com:65/videos/20250608/6845185980eee9b955d0fd33/028cb8/index.m3u8";
 //        String url = "https://m8t.vboku.com/20230325/NA3vw31V/index.m3u8?sign=S7cRpZ10IZtUDxDIRr%252FFeRRnyDIsH1TZ9IZe2hRv2OM%253D";
 //        String url = "https://s10-e1.etcbbh.xyz/ppot/_definst_/mp4:s10/kvod/dhp-jscd2j-no-transyouke-006B409EFqpu5.mp4/chunklist.m3u8?vendtime=1743319171&vhash=WwHcpchsDu8UQWTkkIqZZd4xukWRpa1GfBlgfaF0OMY=&vCustomParameter=0_103.169.127.152_HK_1_0&lb=7fb27a2dd8a388ee580c4103717386bb&us=1&proxy=Sp4mBMKnBcLqOs9YQ2vuUNfyEPYO5hAObpAwCR4nD9Sy7bwV7CnC2rbCIvbT6DYOcekU7bwV7CnC2rbCIvqPc9dOM5XBcDlRNnpCJ0jPJ4kT6PYPs9YOYvZRsD&vv=38fa9409a68d91c6369dee4bb8e91cb7&pub=CJSqCp4qDZCrDYupDJTVI4jVCJ0pBZ4sEIunCZSkCJKoNsKoDZWmOZWnCc8vDZHcP38vOJTbEJ0vOpHaCJapDs4nNs8sD68tEJGuEJGoDcOmC3CrDJ4qE3GtDJDYOJbaP31Y";
 
@@ -70,9 +71,6 @@ public class MainActivity2 extends AppCompatActivity {
         ImageView imageView = new ImageView(this);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setImageResource(R.mipmap.ic_launcher);
-
-
-
 
         Map<String, String> header = new HashMap<>();
         header.put("ee", "33");

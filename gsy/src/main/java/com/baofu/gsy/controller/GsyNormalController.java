@@ -1,8 +1,14 @@
 package com.baofu.gsy.controller;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.BatteryManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.baofu.gsy.R;
@@ -25,7 +32,25 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class GsyNormalController extends StandardGSYVideoPlayer {
+    TextView mSystemTime;
+    TextView mTvBattery;
+    ImageView mBattery;
+    BroadcastReceiver mBatteryReceiver;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
+    private Runnable mUpdateTimeTask = new Runnable() {
+        @Override
+        public void run() {
+            if (mSystemTime != null) {
+                mSystemTime.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
+            }
+            mHandler.postDelayed(this, 1000);
+        }
+    };
 
     ViewGroup mBottomToolsLayout;
     TextView tv_speed;
@@ -85,6 +110,9 @@ public class GsyNormalController extends StandardGSYVideoPlayer {
     @Override
     protected void init(Context context) {
         super.init(context);
+        mSystemTime = findViewById(R.id.tv_system_time);
+        mBattery = findViewById(R.id.iv_battery);
+        mTvBattery = findViewById(R.id.tv_battery);
         mBottomToolsLayout = findViewById(R.id.bottom_tools_layout);
         tv_speed = findViewById(R.id.tv_speed);
         tv_av_scale = findViewById(R.id.tv_av_scale);
@@ -96,6 +124,7 @@ public class GsyNormalController extends StandardGSYVideoPlayer {
         orientationUtils = new OrientationUtils((Activity) getActivityContext(), this);
         //初始化不打开外部的旋转
         orientationUtils.setEnable(true);
+
         tv_av_scale.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,6 +223,65 @@ public class GsyNormalController extends StandardGSYVideoPlayer {
             }
         });
 
+    }
+
+    @Override
+    protected void updateStartImage() {
+        super.updateStartImage();
+
+        if (isIfCurrentIsFullscreen()) {
+            if (mSystemTime != null) {
+                mSystemTime.setVisibility(View.VISIBLE);
+            }
+            if (mBattery != null) {
+                mBattery.setVisibility(View.VISIBLE);
+            }
+            if (mTvBattery != null) {
+                mTvBattery.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (mSystemTime != null) {
+                mSystemTime.setVisibility(View.GONE);
+            }
+            if (mBattery != null) {
+                mBattery.setVisibility(View.GONE);
+            }
+            if (mTvBattery != null) {
+                mTvBattery.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        mBatteryReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+                if (mBattery == null) return;
+
+                if (mTvBattery != null) {
+                    mTvBattery.setText(level + "%");
+                }
+
+                if (level >= 95) {
+                    mBattery.setImageResource(R.drawable.ic_battery_100);
+                } else if (level >= 80) {
+                    mBattery.setImageResource(R.drawable.ic_battery_80);
+                } else if (level >= 50) {
+                    mBattery.setImageResource(R.drawable.ic_battery_50);
+                } else if (level >= 20) {
+                    mBattery.setImageResource(R.drawable.ic_battery_20);
+                } else {
+                    mBattery.setImageResource(R.drawable.ic_battery_0);
+                }
+            }
+        };
+        getContext().registerReceiver(mBatteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        mHandler.post(mUpdateTimeTask);
     }
 
     @Override
@@ -311,6 +399,19 @@ public class GsyNormalController extends StandardGSYVideoPlayer {
         super.dismissVolumeDialog();
         if (mVolumeView != null) {
             mVolumeView.setVisibility(GONE);
+        }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        super.onProgressChanged(seekBar, progress, fromUser);
+        if (fromUser) {
+            long duration = getDuration();
+            long newPosition = (duration * progress) / 100;
+            String timeString = com.shuyu.gsyvideoplayer.utils.CommonUtil.stringForTime((int) newPosition);
+            if (mCurrentTimeTextView != null) {
+                mCurrentTimeTextView.setText(timeString);
+            }
         }
     }
 
@@ -436,6 +537,12 @@ public class GsyNormalController extends StandardGSYVideoPlayer {
             orientationUtils.releaseListener();
         dismissBrightnessDialog();
         dismissVolumeDialog();
+
+        if (mBatteryReceiver != null) {
+            getContext().unregisterReceiver(mBatteryReceiver);
+            mBatteryReceiver = null;
+        }
+        mHandler.removeCallbacks(mUpdateTimeTask);
     }
 
     public void togglePlay() {
